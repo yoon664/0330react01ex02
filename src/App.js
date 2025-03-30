@@ -1,7 +1,31 @@
+import { useState } from "react";
 import "./App.css";
 
 // 부모 컴포넌트
 function App() {
+  const [tasks, setTasks] = useState([]);
+  const [newTask, setNewTask] = useState('');
+
+  const handleChange = (e)=>{
+    console.log(e.target.value);
+    setNewTask(e.target.value);
+    // useState는 비동기로 처리되기 때문에 이전값이 출력
+    // console.log(newTask);
+  }
+
+  const handleClick = ()=>{
+    if(newTask.trim()){
+      setTasks([...tasks, newTask]);
+      setNewTask('');
+    }
+  }
+
+  const handleDelete = (index) => {
+    if(window.confirm('정말 지우시겠습니까?')){
+      const newTasks = tasks.filter((_, i) => i !== index);
+      setTasks(newTasks);
+    }
+  }
   return (
     <>
       <div className="min-h-screen bg-gray-100 flex items-center justify-center">
@@ -9,11 +33,15 @@ function App() {
           <h1 className="text-2xl font-bold mb-4 text-center">To-Do 리스트</h1>
           <div className="mb-4 flex">
             <input
+            ////Input값 읽어오기////
+              onChange={handleChange}
               type="text"
               placeholder="할 일을 입력하세요"
               className="flex-grow p-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
-            <button className="bg-blue-500 text-white px-4 py-2 rounded-r-md hover:bg-blue-600">
+            <button
+            onClick={handleClick}            
+            className="bg-blue-500 text-white px-4 py-2 rounded-r-md hover:bg-blue-600">
               추가
             </button>
           </div>
